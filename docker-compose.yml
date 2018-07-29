@@ -1,0 +1,101 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=test
+    ports:
+      - 5433:5432
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+  bartender:
+    build:
+        context: .
+        args:
+          service: "bartender"
+          version: "0.1.0"
+    environment:
+      RABBIT_HOST: "rabbitmq"
+      RABBIT_PORT: 5672
+      RABBIT_USERNAME: "guest"
+      RABBIT_PASSWORD: "guest"
+      RABBIT_EXCHANGES: "com.example.tap"
+      RABBIT_RK: "water,water;soda,soda;coke,coke;"
+      BARTENDER_QUEUE_NAME: "bartender"
+      BARTENDER_EXCHANGE: "com.example.bartender"
+      BARTENDER_RK: "drink.poured"
+      CONSOLE_HOST: "http://console:9999"
+    ports:
+     - 9000:9000
+  console:
+    build:
+        context: .
+        args:
+          service: "console"
+          version : "0.1.0"
+    environment:
+      DATABASE_HOST: "jdbc:postgresql://db:5432/test"
+      DATABASE_USER: "admin"
+      DATABASE_PASSWORD: "admin"
+      BARTENDER_HOST: "http://bartender:9000"
+    ports:
+      - 9999:9999
+  soda_tap:
+    build:
+        context: .
+        args:
+          service: "tap"
+          version : "0.1.0"
+    environment:
+      TAP_DRINK: "soda_tap"
+      RABBIT_HOST: "rabbitmq"
+      RABBIT_PORT: 5672
+      RABBIT_USERNAME: "guest"
+      RABBIT_PASSWORD: "guest"
+      TAP_RK: "soda"
+      POUR_DURATION: 2 seconds
+      TAP_EXCHANGE: "com.example.tap"
+      TAP_QUEUE: "soda"
+      BARTENDER_EXCHANGE: "com.example.bartender"
+      BARTENDER_RK: "drink.poured"
+  coke_tap:
+    build:
+        context: .
+        args:
+          service: "tap"
+          version : "0.1.0"
+    environment:
+      TAP_DRINK: "coke_tap"
+      RABBIT_HOST: "rabbitmq"
+      RABBIT_PORT: 5672
+      RABBIT_USERNAME: "guest"
+      RABBIT_PASSWORD: "guest"
+      TAP_RK: "coke"
+      POUR_DURATION: 2 seconds
+      TAP_EXCHANGE: "com.example.tap"
+      TAP_QUEUE: "coke"
+      BARTENDER_EXCHANGE: "com.example.bartender"
+      BARTENDER_RK: "drink.poured"
+  water_tap:
+    build:
+        context: .
+        args:
+          service: "tap"
+          version : "0.1.0"
+    environment:
+      TAP_DRINK: "water_tap"
+      RABBIT_HOST: "rabbitmq"
+      RABBIT_PORT: 5672
+      RABBIT_USERNAME: "guest"
+      RABBIT_PASSWORD: "guest"
+      TAP_RK: "water"
+      POUR_DURATION: 2 seconds
+      TAP_EXCHANGE: "com.example.tap"
+      TAP_QUEUE: "water"
+      BARTENDER_EXCHANGE: "com.example.bartender"
+      BARTENDER_RK: "drink.poured"

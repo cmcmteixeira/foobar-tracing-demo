@@ -1,0 +1,15 @@
+.idea
+**/.iml
+bartender/target
+bartender/*.iml
+
+console/target
+console/*.iml
+
+tap/target
+tap/*.iml
+
+target
+project/target
+project/project/target
+
