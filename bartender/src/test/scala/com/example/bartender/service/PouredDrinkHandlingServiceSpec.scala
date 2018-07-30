@@ -18,7 +18,7 @@ class PouredDrinkHandlingServiceSpec extends WordSpec with Matchers {
     "notifiy the bartender that a request has been fulfilled" in {
       val uuid = UUID.randomUUID()
       val service = new PouredDrinkHandlingService(Client.fromHttpService(HttpService[IO] {
-        case PATCH -> Root / "pourRequest" / id if id == uuid.toString => Ok("")
+        case PATCH -> Root / "drinkRequest" / id if id == uuid.toString => Ok("")
       }))
 
       service.notifyConsole(PouredDrinkEvent(uuid)).unsafeRunSync() shouldBe Ack

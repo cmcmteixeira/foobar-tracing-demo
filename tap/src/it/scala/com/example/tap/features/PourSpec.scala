@@ -32,7 +32,7 @@ class PourSpec extends IntegrationTestSpec {
         val result = verifier.messages.toList
         result should have size 1
         val msg = result.head.body.unmarshal[Json].asInstanceOf[Success[Json]].value.asObject.get
-        msg("uuid").get shouldBe uuid.asJson
+        msg("identifier").get shouldBe uuid.asJson
       }
     }
   }

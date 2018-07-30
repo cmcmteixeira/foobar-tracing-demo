@@ -22,7 +22,7 @@ class DrinkPouredIntegrationSpec extends IntegrationTestSpec {
       val uuid   = UUID.randomUUID()
       val buffer = scala.collection.mutable.ListBuffer[UUID]()
       val client = Client.fromHttpService(HttpService[IO] {
-        case PATCH -> Root / "pourRequest" / id => {
+        case PATCH -> Root / "drinkRequest" / id => {
           buffer.append(UUID.fromString(id))
           Ok("")
         }
@@ -32,7 +32,7 @@ class DrinkPouredIntegrationSpec extends IntegrationTestSpec {
       amqpcli
         .publisherOf[Json](jsonCmdBuilder(BartenderConfig.amqp.bartender.exchange, BartenderConfig.amqp.bartender.rk))(
           Json.obj(
-            "uuid" -> uuid.toString.asJson
+            "identifier" -> uuid.toString.asJson
           ))
         .unsafeRunSync()
 
