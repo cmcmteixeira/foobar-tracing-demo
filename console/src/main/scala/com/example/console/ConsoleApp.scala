@@ -47,8 +47,9 @@ class ConsoleApp extends StrictLogging {
               .flatMap {
                 case Right(requestedDrink) => Created(requestedDrink)
                 case Left(e) =>
-                  logger.error("Error while handling request", e)
-                  InternalServerError(ErrorMessage("We couldn't successfully prepare your drink."))
+                  IO(logger.error("Error while handling request", e))
+                    .flatMap(_ => InternalServerError(ErrorMessage("We couldn't successfully prepare your drink.")))
+
               }
           }
       case req @ PATCH -> Root / "drinkRequest" / UUIDVar(uuid) =>
@@ -60,8 +61,9 @@ class ConsoleApp extends StrictLogging {
               .flatMap {
                 case Right(_) => Ok("")
                 case Left(e) =>
-                  logger.error("Error while handling request", e)
-                  InternalServerError(ErrorMessage(s"Failed to updated request for identifier: $uuid."))
+                  IO(logger.error("Error while handling request", e))
+                    .flatMap(_ => InternalServerError(ErrorMessage(s"Failed to updated request for identifier: $uuid.")))
+
               }
           }
       case GET -> Root / "drinkRequest" / UUIDVar(uuid) =>
