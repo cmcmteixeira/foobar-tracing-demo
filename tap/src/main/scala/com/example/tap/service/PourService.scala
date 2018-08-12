@@ -13,7 +13,7 @@ class PourService(pourTime: FiniteDuration) extends StrictLogging {
       _ <- IO {
         Thread.sleep(pourTime.toMillis)
       }
-      _ <- IO(logger.info(s"Poured drink ${request.identifier}."))
+      _ <- IO(logger.info(s"Poured drink ${request.identifier}, took $pourTime."))
     } yield ()
   }
 }

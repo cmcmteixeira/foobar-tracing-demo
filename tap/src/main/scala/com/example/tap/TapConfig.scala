@@ -20,7 +20,7 @@ object TapConfig {
   }
   val tap = new {
     val drink        = Drink(config.getString("amqp.tap.drink"))
-    val pourDuration = config.getDuration("amqp.tap.pourDuration", TimeUnit.MILLISECONDS) millis
+    val pourDuration = config.getDuration("amqp.tap.pourDuration", TimeUnit.MILLISECONDS).millis
     val exchange     = Exchange(ExchangeName(config.getString("amqp.tap.exchange")))
     val rk           = RoutingKey(config.getString("amqp.tap.routingKey"))
     val queue        = Queue(QueueName(config.getString("amqp.tap.queue")))

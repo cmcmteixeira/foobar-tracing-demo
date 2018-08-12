@@ -34,8 +34,15 @@ class BartenderApp(
 ) extends StrictLogging {
 
   private val taps: Map[Drink, Publisher[IO, PourDrinkEvent]] = tapMappings
-    .mapValues((tapServiceCmdBuilder _).tupled)
-    .mapValues(amqpConnection.publisherOf(_))
+    .mapValues{
+      case (ex, rk) => tapServiceCmdBuilder(ex,rk)
+    }
+    .mapValues(builder =>
+      amqpConnection.publisherOf(builder)
+    )
+    .view
+    .force
+
 
   private val tapService         = new TapService(taps)
   private val consoleReqService  = new ConsoleRequestService(UUID.randomUUID, tapService)
@@ -51,10 +58,10 @@ class BartenderApp(
               .attempt
               .flatMap {
                 case Right(spde) => Created(spde)
-                case Left(e) => {
-                  logger.error("Error handling /pour request", e)
-                  InternalServerError(ErrorMessage("Your drink couldn't be poured right now."))
-                }
+                case Left(e) =>
+                  IO(logger.error("Error handling /pour request", e))
+                    .flatMap(_ => InternalServerError(ErrorMessage("Your drink couldn't be poured right now.")))
+
               }
           }
     })
