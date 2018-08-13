@@ -1,4 +1,4 @@
-enablePlugins(JavaAppPackaging)
+enablePlugins(JavaAppPackaging, JavaAgent)
 
 val http4s = Seq(
   "org.http4s" %% "http4s-blaze-server" % "0.18.9",
@@ -38,7 +38,7 @@ val doobie = Seq(
 )
 
 val logging = Seq(
-  "org.log4s" %% "log4s" % "1.6.1",
+  "org.log4s"      %% "log4s"          % "1.6.1",
   "ch.qos.logback" % "logback-classic" % "1.2.3"
 )
 
@@ -50,35 +50,67 @@ val config = Seq(
   "com.typesafe" % "config" % "1.3.2"
 )
 
-val commonConfig = Seq (
+val kamon = Seq(
+  "io.kamon" %% "kamon-executors"  % "1.0.0",
+  "io.kamon" %% "kamon-logback"    % "1.0.0",
+  "io.kamon" %% "kamon-core"       % "1.1.2",
+  "io.kamon" %% "kamon-http4s"     % "1.0.8",
+  "io.kamon" %% "kamon-jaeger"     % "1.0.2",
+  "io.kamon" %% "kamon-zipkin"     % "1.0.0",
+  "io.kamon" %% "kamon-influxdb"   % "1.0.2",
+  "io.kamon" %% "kamon-jdbc"       % "1.0.2",
+  "io.kamon" %% "kamon-prometheus" % "1.1.1",
+  "io.kamon" %% "kamon-influxdb"   % "1.0.2"
+)
+
+val commonConfig = Seq(
   scalaVersion := "2.12.6",
   organization := "com.example"
 )
 
+lazy val common = (project in file("./common"))
+  .configs(IntegrationTest)
+  .settings(
+    commonConfig,
+    name := "common",
+    Defaults.itSettings,
+    libraryDependencies ++= http4s ++ bucky ++ test ++ doobie ++ logging ++ kamon
+  )
+
 lazy val bartender = (project in file("./bartender"))
   .configs(IntegrationTest)
   .enablePlugins(JavaAppPackaging)
-  .enablePlugins(SbtNativePackager)
+  .enablePlugins(JavaAgent)
   .settings(
     commonConfig,
     name := "bartender",
     mainClass in (Compile, packageBin) := Some("com.example.bartender.Main"),
     Defaults.itSettings,
+    javaAgents += "org.aspectj" % "aspectjweaver" % "1.8.13",
+    javaOptions in Universal += "-Dorg.aspectj.tracing.factory=default",
     libraryDependencies ++= http4s ++ bucky ++ test ++ doobie ++ flyway ++ config ++ fs2 ++ logging
   )
+  .dependsOn(common)
+
 lazy val console = (project in file("./console"))
   .configs(IntegrationTest)
   .enablePlugins(JavaAppPackaging)
+  .enablePlugins(JavaAgent)
   .settings(
     commonConfig,
     name := "console",
     mainClass in (Compile, packageBin) := Some("com.example.console.Main"),
     Defaults.itSettings,
+    javaAgents += "org.aspectj" % "aspectjweaver" % "1.8.13",
+    javaOptions in Universal += "-Dorg.aspectj.tracing.factory=default",
     libraryDependencies ++= http4s ++ bucky ++ test ++ doobie ++ flyway ++ config ++ fs2 ++ logging
   )
+  .dependsOn(common)
+
 lazy val tap = (project in file("./tap"))
   .configs(IntegrationTest)
   .enablePlugins(JavaAppPackaging)
+  .enablePlugins(JavaAgent)
   .settings(
     commonConfig,
     mainClass in (Compile, packageBin) := Some("com.example.tap.Main"),
@@ -86,3 +118,4 @@ lazy val tap = (project in file("./tap"))
     Defaults.itSettings,
     libraryDependencies ++= http4s ++ bucky ++ test ++ flyway ++ config ++ fs2 ++ logging
   )
+  .dependsOn(common)

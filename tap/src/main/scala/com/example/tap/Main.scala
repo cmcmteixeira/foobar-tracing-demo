@@ -1,17 +1,21 @@
 package com.example.tap
 
 import cats.effect.IO
+import com.example.tracing.amqp.TracedIOAmqpClient
 import com.itv.bucky.fs2._
-import fs2.StreamApp
+import fs2.{Stream, StreamApp}
 import fs2.StreamApp.ExitCode
+import kamon.Kamon
+import kamon.influxdb.InfluxDBReporter
 
 object Main extends StreamApp[IO] {
   implicit val ec = scala.concurrent.ExecutionContext.global
 
-  override def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, StreamApp.ExitCode] = {
+  override def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, StreamApp.ExitCode] =
     for {
+      _          <- Stream.emit(Kamon.loadReportersFromConfig())
+      _          <- Stream.emit(Kamon.addReporter(new InfluxDBReporter()))
       amqpClient <- clientFrom(TapConfig.amqp.clientConfig, TapConfig.declarations)
-      app        <- new TapApp(amqpClient).startAmqp().drain
+      app        <- new TapApp(TracedIOAmqpClient(amqpClient)).startAmqp().drain
     } yield ExitCode.Success
-  }
 }
