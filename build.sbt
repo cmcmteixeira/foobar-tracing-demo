@@ -3,15 +3,15 @@ enablePlugins(JavaAppPackaging, JavaAgent)
 val http4s = Seq(
   "org.http4s" %% "http4s-blaze-server" % "0.18.9",
   "org.http4s" %% "http4s-blaze-client" % "0.18.9",
-  "org.http4s" %% "http4s-dsl" % "0.18.9",
-  "org.http4s" %% "http4s-circe" % "0.18.9"
+  "org.http4s" %% "http4s-dsl"          % "0.18.9",
+  "org.http4s" %% "http4s-circe"        % "0.18.9"
 )
 
 val bucky = Seq(
   "com.itv" %% "bucky-rabbitmq" % "1.3.1",
-  "com.itv" %% "bucky-circe" % "1.3.1",
-  "com.itv" %% "bucky-fs2" % "1.3.1",
-  "com.itv" %% "bucky-test" % "1.3.1" % "test, it"
+  "com.itv" %% "bucky-circe"    % "1.3.1",
+  "com.itv" %% "bucky-fs2"      % "1.3.1",
+  "com.itv" %% "bucky-test"     % "1.3.1" % "test, it"
 )
 
 val fs2 = Seq(
@@ -19,15 +19,15 @@ val fs2 = Seq(
 )
 
 val test = Seq(
-  "org.scalactic" %% "scalactic" % "3.0.5",
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test,it",
-  "com.h2database" % "h2" % "1.4.197" % "it",
-  "org.scalamock" %% "scalamock" % "4.1.0" % "test",
+  "org.scalactic"  %% "scalactic" % "3.0.5",
+  "org.scalatest"  %% "scalatest" % "3.0.5" % "test,it",
+  "com.h2database" % "h2"         % "1.4.197" % "it",
+  "org.scalamock"  %% "scalamock" % "4.1.0" % "test",
 )
 
 val circe = Seq(
-  "io.circe"                   %% "circe-generic"            % "0.9.3",
-  "io.circe"                   %% "circe-parser"             % "0.9.3",
+  "io.circe" %% "circe-generic" % "0.9.3",
+  "io.circe" %% "circe-parser"  % "0.9.3",
 )
 
 val doobie = Seq(
@@ -39,7 +39,8 @@ val doobie = Seq(
 
 val logging = Seq(
   "org.log4s"      %% "log4s"          % "1.6.1",
-  "ch.qos.logback" % "logback-classic" % "1.2.3"
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "net.logstash.logback"       % "logstash-logback-encoder"   % "5.2"
 )
 
 val flyway = Seq(
@@ -51,16 +52,16 @@ val config = Seq(
 )
 
 val kamon = Seq(
-  "io.kamon" %% "kamon-executors"  % "1.0.0",
-  "io.kamon" %% "kamon-logback"    % "1.0.0",
-  "io.kamon" %% "kamon-core"       % "1.1.2",
-  "io.kamon" %% "kamon-http4s"     % "1.0.8",
-  "io.kamon" %% "kamon-jaeger"     % "1.0.2",
-  "io.kamon" %% "kamon-zipkin"     % "1.0.0",
-  "io.kamon" %% "kamon-influxdb"   % "1.0.2",
-  "io.kamon" %% "kamon-jdbc"       % "1.0.2",
-  "io.kamon" %% "kamon-prometheus" % "1.1.1",
-  "io.kamon" %% "kamon-influxdb"   % "1.0.2"
+  "io.kamon"       %% "kamon-executors"      % "1.0.0",
+  "io.kamon"       %% "kamon-logback"        % "1.0.2",
+  "io.kamon"       %% "kamon-core"           % "1.1.2",
+  "io.kamon"       %% "kamon-http4s"         % "1.0.8",
+  "io.kamon"       %% "kamon-jaeger"         % "1.0.2",
+  "io.kamon"       %% "kamon-zipkin"         % "1.0.0",
+  "io.kamon"       %% "kamon-influxdb"       % "1.0.2",
+  "io.kamon"       %% "kamon-jdbc"           % "1.0.2",
+  "io.kamon"       %% "kamon-influxdb"       % "1.0.2",
+  "io.kamon"       %% "kamon-system-metrics" % "1.0.0",
 )
 
 val commonConfig = Seq(

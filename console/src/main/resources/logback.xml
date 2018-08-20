@@ -2,14 +2,38 @@
     <conversionRule conversionWord="traceID" converterClass="kamon.logback.LogbackTraceIDConverter"/>
     <conversionRule conversionWord="spanID" converterClass="com.example.tracing.logback.LogbackSpanIDConverter"/>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%traceID %spanID %d{HH:mm:ss.SSS} %t %-5level %logger{36} - %msg%n</pattern>
+    <variable name="LOGSTASH_HOST" value="${LOGSTASH_HOST:-127.0.0.1}" />
+    <variable name="LOGSTASH_PORT" value="${LOGSTASH_PORT:-4560}" />
+    <variable name="SERVICE_NAME" value="${SERVICE_NAME:-undefined}" />
+
+    <appender name="STASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeContext>true</includeContext>
+            <fieldNames>
+                <levelValue>severity</levelValue>
+                <level>severity_label</level>
+            </fieldNames>
+            <customFields>{"role": "app", "service": "${SERVICE_NAME}"}</customFields>
         </encoder>
     </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%X{traceID} %X{spanID} %d{HH:mm:ss.SSS} %t %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="STASH"/>
+    </appender>
+
     <logger name="org.http4s" level="ERROR" />
+    <logger name="net.logstash.logback" level="ERROR" />
 
     <root level="DEBUG">
+        <appender-ref ref="ASYNC"/>
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>

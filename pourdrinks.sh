@@ -25,13 +25,13 @@ esac
 done
 
 for ((i=1; i<= SODA; i++)); do
-    curl -X POST 127.0.0.1:9999/drinkRequest -d '{"drink": "soda"}' -w "\n" &
+    curl -X POST 127.0.0.1:9999/drinkRequest -d '{"drink": "soda"}' -w "\n" 
 done
 
 for ((i=1; i <=$WATE WATER; i++)); do
-    curl -X POST 127.0.0.1:9999/drinkRequest -d '{"drink": "water"}' -w "\n" &
+    curl -X POST 127.0.0.1:9999/drinkRequest -d '{"drink": "water"}' -w "\n" 
 done
 
 for ((i=1; i <= COKE; i++)); do
-    curl -X POST 127.0.0.1:9999/drinkRequest -d '{"drink": "coke"}' -w "\n" &
+    curl -X POST 127.0.0.1:9999/drinkRequest -d '{"drink": "coke"}' -w "\n"  
 done

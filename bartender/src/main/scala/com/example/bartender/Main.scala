@@ -10,6 +10,7 @@ import org.http4s.server.blaze.BlazeBuilder
 import kamon.http4s.middleware.client.{KamonSupport => ClientKamonSupport}
 import kamon.http4s.middleware.server.{KamonSupport => ServerKamonSupport}
 import kamon.influxdb.InfluxDBReporter
+import kamon.system.SystemMetrics
 
 import scala.concurrent.ExecutionContext
 
@@ -21,6 +22,7 @@ object Main extends StreamApp[IO] {
     for {
       _      <- Stream.emit(Kamon.loadReportersFromConfig())
       _      <- Stream.emit(Kamon.addReporter(new InfluxDBReporter()))
+      _      <- Stream.emit(SystemMetrics.startCollecting())
       client <- Http1Client.stream[IO](BlazeClientConfig.defaultConfig.copy(executionContext = ec))
       traceClient = ClientKamonSupport(client)
       amqpConnection <- clientFrom(config.amqp.amqpConfig, BartenderConfig.declarations)(ec)

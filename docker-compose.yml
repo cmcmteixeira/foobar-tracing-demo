@@ -6,7 +6,37 @@ services:
     - 3000:3000
     environment:
     - GF_SECURITY_ADMIN_PASSWORD=admin
-    - GF_INSTALL_PLUGINS=mtanda-histogram-panel,grafana-piechart-panel,
+    volumes:
+      - ./docker/data/grafana:/var/lib/grafana
+  logstash:
+    image: docker.elastic.co/logstash/logstash:6.3.2
+    volumes:
+      - ./docker/data/logstash/data:/usr/share/logstash/data
+      - ./docker/data/logstash/logs:/usr/share/logstash/logs
+      - ./docker/config/logstash/config:/usr/share/logstash/config
+      - ./docker/config/logstash/pipeline:/usr/share/logstash/pipeline
+    depends_on:
+      - elasticsearch
+    ports:
+      - 9600:9600
+      - 4560:4560
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.2
+    ports:
+      - 5601:5601
+    environment:
+        - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+        - elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.2
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - ./docker/data/elasticsearch:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
   influxdb:
     image: influxdb:latest
     ports:
@@ -73,10 +103,18 @@ services:
       INFLUX_DB_NAME: "pub"
       INFLUX_DB_USERNAME: "user"
       INFLUX_DB_PASSWORD: "password"
-      TRACE_TICK_INTERVAL: "5 seconds"
+      TRACE_TICK_INTERVAL: "10 seconds"
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
+      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_PORT: 9411
+      SIGAR_ENABLED: "false"
+      JMX_ENABLED: "true"
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 4560
+    depends_on:
+      - db
     ports:
     - 9000:9000
   console:
@@ -96,12 +134,21 @@ services:
       INFLUX_DB_NAME: "pub"
       INFLUX_DB_USERNAME: "user"
       INFLUX_DB_PASSWORD: "password"
-      TRACE_TICK_INTERVAL: "5 seconds"
+      TRACE_TICK_INTERVAL: "10 seconds"
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
+      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_PORT: 9411
+      SIGAR_ENABLED: "false"
+      JMX_ENABLED: "true"
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 4560
     ports:
     - 9999:9999
+    depends_on:
+      - rabbitmq
+      - db
   soda_tap:
     build:
       context: .
@@ -126,10 +173,18 @@ services:
       INFLUX_DB_NAME: "pub"
       INFLUX_DB_USERNAME: "user"
       INFLUX_DB_PASSWORD: "password"
-      TRACE_TICK_INTERVAL: "5 seconds"
+      TRACE_TICK_INTERVAL: "10 seconds"
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
+      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_PORT: 9411
+      SIGAR_ENABLED: "false"
+      JMX_ENABLED: "true"
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 4560
+    depends_on:
+      - rabbitmq
   coke_tap:
     build:
       context: .
@@ -154,10 +209,18 @@ services:
       INFLUX_DB_NAME: "pub"
       INFLUX_DB_USERNAME: "user"
       INFLUX_DB_PASSWORD: "password"
-      TRACE_TICK_INTERVAL: "5 seconds"
+      TRACE_TICK_INTERVAL: "10 seconds"
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
+      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_PORT: 9411
+      SIGAR_ENABLED: "false"
+      JMX_ENABLED: "true"
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 4560
+    depends_on:
+      - rabbitmq
   water_tap:
     build:
       context: .
@@ -182,7 +245,15 @@ services:
       INFLUX_DB_NAME: "pub"
       INFLUX_DB_USERNAME: "user"
       INFLUX_DB_PASSWORD: "password"
-      TRACE_TICK_INTERVAL: "5 seconds"
+      TRACE_TICK_INTERVAL: "10 seconds"
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
+      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_PORT: 9411
+      SIGAR_ENABLED: "false"
+      JMX_ENABLED: "true"
+      LOGSTASH_HOST: logstash
+      LOGSTASH_PORT: 4560
+    depends_on:
+      - rabbitmq

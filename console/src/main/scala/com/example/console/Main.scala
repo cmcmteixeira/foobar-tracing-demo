@@ -12,6 +12,7 @@ import kamon.Kamon
 import kamon.http4s.middleware.client.{KamonSupport => ClientKamonSupport}
 import kamon.http4s.middleware.server.{KamonSupport => ServerKamonSupport}
 import kamon.influxdb.InfluxDBReporter
+import kamon.system.SystemMetrics
 
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext
@@ -28,6 +29,7 @@ object Main extends StreamApp[IO] {
     for {
       _           <- Stream.emit(Kamon.loadReportersFromConfig())
       _           <- Stream.emit(Kamon.addReporter(new InfluxDBReporter()))
+      _           <- Stream.emit(SystemMetrics.startCollecting())
       client      <- Http1Client.stream[IO](BlazeClientConfig.defaultConfig.copy(executionContext = ec))
       traceClient <- Stream.emit(ClientKamonSupport(client))
       router      <- Stream.emit(new ConsoleApp().start(config, traceClient, tx))
