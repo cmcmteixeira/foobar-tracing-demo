@@ -10,7 +10,7 @@ import kamon.influxdb.InfluxDBReporter
 import kamon.system.SystemMetrics
 
 object Main extends StreamApp[IO] {
-  implicit val ec = scala.concurrent.ExecutionContext.global
+  implicit val ec = com.example.tracing.ec
 
   override def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, StreamApp.ExitCode] =
     for {
