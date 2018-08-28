@@ -1,5 +1,5 @@
 .idea
-**/.iml
+
 bartender/target
 bartender/*.iml
 
@@ -9,8 +9,12 @@ console/*.iml
 tap/target
 tap/*.iml
 
-target
+common/target
+common/*.iml
+
 project/target
 project/project/target
+
+target
 
 docker/data
