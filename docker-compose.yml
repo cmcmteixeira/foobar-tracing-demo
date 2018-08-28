@@ -107,7 +107,7 @@ services:
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
-      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_HOST: "zipkin"
       ZIPKIN_PORT: 9411
       SIGAR_ENABLED: "false"
       JMX_ENABLED: "true"
@@ -138,7 +138,7 @@ services:
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
-      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_HOST: "zipkin"
       ZIPKIN_PORT: 9411
       SIGAR_ENABLED: "false"
       JMX_ENABLED: "true"
@@ -177,7 +177,7 @@ services:
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
-      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_HOST: "zipkin"
       ZIPKIN_PORT: 9411
       SIGAR_ENABLED: "false"
       JMX_ENABLED: "true"
@@ -213,7 +213,7 @@ services:
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
-      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_HOST: "zipkin"
       ZIPKIN_PORT: 9411
       SIGAR_ENABLED: "false"
       JMX_ENABLED: "true"
@@ -249,7 +249,7 @@ services:
       TRACE_SAMPLING_PROBABILITY: "1"
       JAEGER_HOST: "jaeger"
       JAEGER_PORT: 14268
-      ZIPKIN_HOST: "http://zipkin"
+      ZIPKIN_HOST: "zipkin"
       ZIPKIN_PORT: 9411
       SIGAR_ENABLED: "false"
       JMX_ENABLED: "true"
