@@ -162,7 +162,7 @@ services:
       RABBIT_USERNAME: "guest"
       RABBIT_PASSWORD: "guest"
       TAP_RK: "soda"
-      POUR_DURATION: 2 seconds
+      POUR_DURATION: "200 millis"
       TAP_EXCHANGE: "com.example.tap"
       TAP_QUEUE: "soda"
       BARTENDER_EXCHANGE: "com.example.bartender"
@@ -198,7 +198,7 @@ services:
       RABBIT_USERNAME: "guest"
       RABBIT_PASSWORD: "guest"
       TAP_RK: "coke"
-      POUR_DURATION: 2 seconds
+      POUR_DURATION: "200 milis"
       TAP_EXCHANGE: "com.example.tap"
       TAP_QUEUE: "coke"
       BARTENDER_EXCHANGE: "com.example.bartender"
@@ -234,7 +234,7 @@ services:
       RABBIT_USERNAME: "guest"
       RABBIT_PASSWORD: "guest"
       TAP_RK: "water"
-      POUR_DURATION: 2 seconds
+      POUR_DURATION: "200 millis"
       TAP_EXCHANGE: "com.example.tap"
       TAP_QUEUE: "water"
       BARTENDER_EXCHANGE: "com.example.bartender"
