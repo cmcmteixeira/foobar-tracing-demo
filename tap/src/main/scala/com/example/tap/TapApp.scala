@@ -18,7 +18,7 @@ class TapApp(amqpConnection: IOAmqpClient) {
   private val amqpPublisher: Publisher[IO, DrinkPouredEvent] = amqpConnection.publisherOf[DrinkPouredEvent](dprCmdBuilder)
   private val pourService: PourService                       = new PourService(config.tap.pourDuration)
   private val requestHandlingService: RequestHandlingService = new RequestHandlingService(pourService, config.tap.drink, amqpPublisher)
-  implicit val ec                                            = scala.concurrent.ExecutionContext.global
+
   def startAmqp(): Stream[IO, Unit] = {
     for {
       _ <- amqpConnection.consumer(

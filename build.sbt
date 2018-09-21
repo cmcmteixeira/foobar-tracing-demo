@@ -89,7 +89,7 @@ lazy val bartender = (project in file("./bartender"))
     Defaults.itSettings,
     javaAgents += "org.aspectj" % "aspectjweaver" % "1.8.13",
     javaOptions in Universal += "-Dorg.aspectj.tracing.factory=default",
-    libraryDependencies ++= http4s ++ bucky ++ test ++ doobie ++ flyway ++ config ++ fs2 ++ logging
+    libraryDependencies ++= http4s ++ bucky ++ test ++ config ++ fs2 ++ logging
   )
   .dependsOn(common)
 
@@ -114,9 +114,11 @@ lazy val tap = (project in file("./tap"))
   .enablePlugins(JavaAgent)
   .settings(
     commonConfig,
-    mainClass in (Compile, packageBin) := Some("com.example.tap.Main"),
     name := "tap",
+    mainClass in (Compile, packageBin) := Some("com.example.tap.Main"),
     Defaults.itSettings,
-    libraryDependencies ++= http4s ++ bucky ++ test ++ flyway ++ config ++ fs2 ++ logging
+    javaAgents += "org.aspectj" % "aspectjweaver" % "1.8.13",
+    javaOptions in Universal += "-Dorg.aspectj.tracing.factory=default",
+    libraryDependencies ++= http4s ++ bucky ++ test ++ config ++ fs2 ++ logging
   )
   .dependsOn(common)
