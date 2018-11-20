@@ -1,3 +1,5 @@
+#### How to use Kamon ?
+If you're looking for a quick "how to add Kamon to a project tutorial", this [commit](https://github.com/cmcmteixeira/foobar-tracing-demo/commit/ff05a9cd8ba25e8b500f17794b4d4c9a6ed7c8b6) should be able to help you.
     
 #### Building the applications (optional)
 
@@ -81,5 +83,3 @@ drinks using an HTTP interface.
     * The Bartender app signals to the Console app that the event has been successfully processed
     * The Console app updates it's internal state
 6) \* At any time, the request status can be checked by calling GET /drinRequest/:uuid
-
-    
