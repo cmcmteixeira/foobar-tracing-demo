@@ -1,5 +1,5 @@
 #### How to use Kamon ?
-If you're looking for a quick "how to add Kamon to a project tutorial", this [commit](https://github.com/cmcmteixeira/foobar-tracing-demo/commit/ff05a9cd8ba25e8b500f17794b4d4c9a6ed7c8b6) should be able to help you.
+If you're looking for a quick "what does it take to add Kamon to a project?", this [commit](https://github.com/cmcmteixeira/foobar-tracing-demo/commit/ff05a9cd8ba25e8b500f17794b4d4c9a6ed7c8b6) should be able to help you.
     
 #### Building the applications (optional)
 
